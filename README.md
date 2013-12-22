@@ -3,7 +3,7 @@ Extendable Freely Jointed Chain 1D
 
 Model of the extendable freely-jointed-chain in one dimension. 
 
-Using the Fourier Trasform Integral method, the script plots the Partition Function for an Extendable Freely Jointed Chain Model at different extensions. For a freely-jointed-chain with `N` links, each of length `a`, we include a parameter `p` that controls the extensibility of each link.
+Using the Fourier Trasform Integral method, this script plots the Partition Function for an Extendable Freely Jointed Chain Model at different extensions. For a freely-jointed-chain with `N` links, each of length `a`, we include a parameter `p` that controls the extensibility of each link.
 
 This calculation supports the Extendable Freely Jointed Chain chapter of the UCL PhD thesis.
 
