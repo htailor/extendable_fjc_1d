@@ -13,57 +13,50 @@ import numpy as np
 from multiprocessing import Pool
 from libmath import *
 
+# Use LaTeX for plot labels and text
 plt.rc('text',usetex=True)
 plt.rc('font',**{'family':'serif','serif':['Computer Modern']})
 
-ResultsDir = 'results'
+# Results directory
+ResultsDir = 'results'  
 
-#Default Values
-
+# Default values for link length "a", and extendable_length "p" 
 link_length=1
 extendable_length=0.1
 
 
-def ConstantParameter(n_):
+###############################
+# Partition Function equation #
+###############################
 
+def ConstantParameter(n_):
     return 1/float(2*factorial(n_ - 1)) * pow(1/float(2*extendable_length) ,n_)
     
-
 def Eta(n_, k1_, k2_, R_):
-
     return link_length*(n_ - 2*k1_) + (extendable_length/2)*(n_ - 2*k2_) - R_
 
-
 def F(n_, k1_, k2_):
-
     return link_length*(n_ - 2*k1_) + (extendable_length/2)*(n_ - 2*k2_)
-
-
+    
 def TopHat(n_, k1_, k2_, R_):
-
     return heaviside_step(R_ - F(n_, k1_, n_)) * heaviside_step(F(n_, k1_, 0) - R_)
 
-
 def Kernal(n_, k1_, k2_, R_):
-
     return pow(-1,k2_) * double_binomial(n_, k1_, k2_) * pow(Eta(n_, k1_, k2_, R_),n_-1) * sgn(Eta(n_, k1_, k2_, R_))
 
-
 def KernalModified(n_, k1_, k2_, R_):
-
     return pow(-1,k2_) * double_binomial(n_, k1_, k2_) * pow(Eta(n_, k1_, k2_, R_),n_-1) * sgn(Eta(n_, k1_, k2_, R_)) * TopHat(n_, k1_, k2_, R_)
 
-
+# Original Partition Function equation
 def PartitionFunction(n_, R_):
-
     SumPartitionFunction = 0
     for i in range(0,int(n_+1)):
         for j in range(0,int(n_+1)):
             SumPartitionFunction = SumPartitionFunction + Kernal(n_,i,j,R_)
     return ConstantParameter(n_) * SumPartitionFunction
 
+# Modified Partition Function equation
 def PartitionFunctionModified(n_, R_):
-
     SumPartitionFunction = 0
     for i in range(0,int(n_+1)):
         for j in range(0,int(n_+1)):
@@ -71,11 +64,16 @@ def PartitionFunctionModified(n_, R_):
     return ConstantParameter(n_) * SumPartitionFunction
 
 
+####################
+# Generate Results #
+####################
+
+# Generates Z(0) for various N
 def Z0_data():
 
-    nlistmax = 20
-
-    Nlist = np.linspace(2,nlistmax,10)
+    # N list
+    nlistmax = 20                       
+    Nlist = np.linspace(2,nlistmax,10)   
     Z0list = []
 
     for n in Nlist:
@@ -95,6 +93,7 @@ def Z0_data():
     plt.figure()
 
 
+# Generates Z(R) for both the original and modified Partition Functions
 def ZR_data(n_):
 
     nrange = n_ + 1
@@ -124,7 +123,7 @@ def ZR_data(n_):
     PlotData(nx,zr_modified,'R/a','Z(R)/A^{N}',output_filename_plot_PDF_mod,'#05467C','#E6ECF2')
 
 
-
+# Plotting function
 def PlotData(xData_, yData_, xlabel_, ylabel_, outfilenamepdf_, plotcolor_, fillcolor_):
 
     plt.plot(xData_, yData_, color=plotcolor_, linewidth=2.0, zorder=100)
@@ -156,13 +155,12 @@ def main():
     else:
         os.makedirs(ResultsDir)
 
-
     cpu_cores=multiprocessing.cpu_count()
     start = time.clock()
 
     pool = Pool(processes=cpu_cores)   
 
-    N = [1,2,4,6,8,10]
+    N = [1,2,4,6,8,10]      # N list for ZR_data()
 
     print "\nExtendable Freely Jointed Chain 1D"
     print "----------------------------------\n"
@@ -173,7 +171,7 @@ def main():
     
     Z0_data()
 
-    pool.map(ZR_data, N)
+    pool.map(ZR_data, N)    # Multithread ZR_data
 
     print 
     print 'Runtime (' + str(cpu_cores) + ' cpu cores) : ' + str(time.clock()-start)
