@@ -15,7 +15,7 @@ from libmath import *
 
 # Use LaTeX for plot labels and text
 plt.rc('text',usetex=True)
-plt.rc('font',**{'family':'serif','serif':['Computer Modern']})
+plt.rc('font',**{'family':'serif','serif':['Computer Modern'],'size':16})
 
 # Results directory
 ResultsDir = 'results'  
@@ -128,8 +128,8 @@ def PlotData(xData_, yData_, xlabel_, ylabel_, outfilenamepdf_, plotcolor_, fill
 
     plt.plot(xData_, yData_, color=plotcolor_, linewidth=2.0, zorder=100)
     plt.fill(xData_, yData_, color=fillcolor_) 
-    plt.xlabel(r'$' + xlabel_ + '$',fontsize=12)
-    plt.ylabel(r'$' + ylabel_ + '$', fontsize=12)
+    plt.xlabel(r'$' + xlabel_ + '$',fontsize=18)
+    plt.ylabel(r'$' + ylabel_ + '$', fontsize=18)
     plt.grid(color='0.85', linestyle='--')
 
     plt.ylim([0,max(yData_)+0.05*max(yData_)])
